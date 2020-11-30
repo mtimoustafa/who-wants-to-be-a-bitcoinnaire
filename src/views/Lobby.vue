@@ -1,13 +1,14 @@
 <template>
   <div>
-    <h1>Who Wants to Be a Bitcoinnaire?</h1>
-
     <div class="lobby__game-options">
       <label for="difficulty-select">
         Difficulty
       </label>
 
-      <select id="difficulty-select">
+      <select
+        id="difficulty-select"
+        v-model="difficulty"
+      >
         <option
           v-for="difficulty in difficulties"
           :key="difficulty.id"
@@ -31,8 +32,13 @@ export default {
         { id: 'medium', label: 'Medium' },
         { id: 'hard', label: 'Hard' },
       ],
+      difficulty: '',
     };
   },
+
+  mounted() {
+    this.difficulty = this.difficulties[0].id;
+  }
 }
 </script>
 
