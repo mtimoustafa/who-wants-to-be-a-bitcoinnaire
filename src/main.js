@@ -1,10 +1,16 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
+import { createApp } from 'vue';
+import { createStore } from 'vuex';
 
-const app = createApp(App)
+import App from './App.vue';
+import router from './router';
 
-app.config.devtools = (process.env.NODE_ENV === 'development')
+import Store from './store/store.js';
 
-app.use(router)
-app.mount('#app')
+const app = createApp(App);
+
+app.config.devtools = (process.env.NODE_ENV === 'development');
+
+const store = createStore(Store);
+
+app.use(store).use(router);
+app.mount('#app');

@@ -1,16 +1,18 @@
 <template>
-  Question {{ questionNumber }} of {{ totalQuestions }}
+  Question {{ currentQuestion }} of {{ totalQuestions }}
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'Questions',
 
-  data() {
-    return {
-      questionNumber: 1,
-      totalQuestions: 20,
-    };
+  computed: {
+    ...mapState([
+      'currentQuestion',
+      'totalQuestions',
+    ]),
   },
 }
 </script>
