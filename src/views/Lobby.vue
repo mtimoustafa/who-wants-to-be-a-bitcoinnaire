@@ -17,6 +17,10 @@
           {{ difficulty.label }}
         </option>
       </select>
+
+      <button @click="$router.push('questions')">
+        Start
+      </button>
     </div>
   </div>
 </template>
@@ -38,7 +42,7 @@ export default {
 
   mounted() {
     this.difficulty = this.difficulties[0].id;
-  }
+  },
 }
 </script>
 
