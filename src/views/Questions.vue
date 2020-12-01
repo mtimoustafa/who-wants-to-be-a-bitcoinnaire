@@ -1,9 +1,11 @@
 <template>
   Question {{ currentQuestion }} of {{ totalQuestions }}
+
+  <button @click="testOpenTriviaApi">Test</button>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'Questions',
@@ -12,7 +14,12 @@ export default {
     ...mapState([
       'currentQuestion',
       'totalQuestions',
+      'questions',
     ]),
+  },
+
+  methods: {
+    ...mapActions(['testOpenTriviaApi']),
   },
 }
 </script>
