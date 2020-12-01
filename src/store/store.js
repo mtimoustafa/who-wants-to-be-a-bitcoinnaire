@@ -2,12 +2,11 @@ import axios from 'axios';
 
 export default {
   state: {
-    currentQuestion: 1,
-    totalQuestions: 20,
     openTriviaApiPath: 'https://opentdb.com/api.php',
     triviaProperties: {
       amount: 10,
     },
+
     questions: {},
   },
 
@@ -16,6 +15,10 @@ export default {
       return Object.entries(state.triviaProperties)
                    .map(([key, value]) => `${key}=${value}`)
                    .join('&');
+    },
+
+    questionsPopulated(state) {
+      return state.questions && Object.keys(state.questions).length > 0;
     },
   },
 
@@ -26,7 +29,7 @@ export default {
   },
 
   actions: {
-    async testOpenTriviaApi({ state, commit, getters }) {
+    async populateQuestions({ state, commit, getters }) {
       let query = `${state.openTriviaApiPath}?${getters.triviaPropertiesAsParams}`;
       const { data: { results: questions } } = await axios.get(query);
 
