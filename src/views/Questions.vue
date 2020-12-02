@@ -48,7 +48,7 @@ export default {
       chosenAnswer: undefined,
 
       answerPool: [],
-      score: 0,
+      currentScore: 0,
     };
   },
 
@@ -76,7 +76,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['populateQuestions']),
+    ...mapActions(['populateQuestions', 'completeRound']),
 
     startRound() {
       this.answerPool = this.shuffledAnswers(this.currentQuestion);
@@ -87,12 +87,12 @@ export default {
       if (!this.chosenAnswer) { return; }
 
       // TODO-EXTRA: display correct answer before moving on, if false answer
-      this.score += (this.chosenAnswer === this.currentQuestion.correct_answer);
+      this.currentScore += (this.chosenAnswer === this.currentQuestion.correct_answer);
 
       if (this.currentQuestionNumber < this.totalQuestions) {
         this.getNextQuestion();
       } else {
-        this.completeRound();
+        this.submitRound();
       }
     },
 
@@ -102,7 +102,8 @@ export default {
       this.answerPool = this.shuffledAnswers(this.currentQuestion);
     },
 
-    completeRound() {
+    submitRound() {
+      this.completeRound(this.currentScore);
       this.$router.push('summary');
     },
 

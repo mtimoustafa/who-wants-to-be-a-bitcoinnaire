@@ -8,6 +8,11 @@ export default {
     },
 
     questions: {},
+    lastRound: {
+      score: 0,
+      totalQuestions: 0,
+      percentCorrect: '0%',
+    },
   },
 
   getters: {
@@ -26,6 +31,14 @@ export default {
     setQuestions(state, questions) {
       state.questions = questions;
     },
+
+    setLastRound(state, { score, totalQuestions, percentCorrect }) {
+      state.lastRound = {
+        score,
+        totalQuestions,
+        percentCorrect,
+      };
+    },
   },
 
   actions: {
@@ -36,6 +49,17 @@ export default {
       // TODO: validation for when API returns an error
 
       commit('setQuestions', questions);
+    },
+
+    completeRound({ state, commit }, score) {
+      const totalQuestions = state.questions.length || 0;
+      const percentCorrect = (score && totalQuestions) ? score / totalQuestions * 100 : 0;
+
+      commit('setLastRound', {
+        score,
+        totalQuestions,
+        percentCorrect: `${percentCorrect}%`,
+      });
     },
   },
 };
