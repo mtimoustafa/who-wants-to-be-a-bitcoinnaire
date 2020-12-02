@@ -24,12 +24,13 @@ db.serialize(() => {
     playerName TEXT, \
     score INTEGER, \
     totalQuestions INTEGER, \
+    rankingScore FLOAT, \
     difficulty TINYTEXT \
   )');
 });
 
-app.get('/api/scores', (req, res, next) => {
-  db.all('SELECT * from scores', (err, scores) => {
+app.get('/api/high_scores', (req, res, next) => {
+  db.all('SELECT * from scores ORDER BY rankingScore DESC LIMIT 10', (err, scores) => {
     res.json(scores);
   });
 });
@@ -38,6 +39,7 @@ app.post('/api/scores', [
   body('playerName').not().isEmpty().trim().escape(),
   body('score').isInt({ min: 0 }),
   body('totalQuestions').isInt({ min: 0 }),
+  body('rankingScore').isDecimal(),
   body('difficulty').isIn(['easy', 'medium', 'hard']),
 ],(req, res, next) => {
   const errors = validationResult(req);
@@ -45,10 +47,11 @@ app.post('/api/scores', [
     return res.status(400).json({ errors: errors.array() });
   }
 
-  db.run('INSERT INTO scores(playerName, score, totalQuestions, difficulty) values (?, ?, ?, ?)', [
+  db.run('INSERT INTO scores(playerName, score, totalQuestions, rankingScore, difficulty) values (?, ?, ?, ?, ?)', [
     req.body.playerName,
     req.body.score,
     req.body.totalQuestions,
+    req.body.rankingScore,
     req.body.difficulty,
   ], err => {
     if (err) res.status(500).json({ error: err.message });

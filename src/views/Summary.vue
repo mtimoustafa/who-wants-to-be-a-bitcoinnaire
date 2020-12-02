@@ -9,18 +9,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'Summary',
 
   computed: {
     ...mapState(['roundStats']),
-
-    percentCorrect() {
-      const { score, totalQuestions } = this.roundStats;
-      return (score && totalQuestions) ? score / totalQuestions * 100 : 0;
-    },
+    ...mapGetters(['percentCorrect']),
   },
 }
 </script>

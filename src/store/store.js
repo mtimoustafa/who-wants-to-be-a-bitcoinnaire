@@ -32,6 +32,11 @@ export default {
         difficulty: '',
       };
     },
+
+    percentCorrect(state) {
+      const { score, totalQuestions } = state.roundStats;
+      return (score && totalQuestions) ? score / totalQuestions * 100 : 0;
+    },
   },
 
   mutations: {
@@ -85,8 +90,8 @@ export default {
       dispatch('submitStats');
     },
 
-    async submitStats({ state }) {
-      const response = await axios.post(`${state.bitcoinaireApiPath}/scores`, state.roundStats);
+    async submitStats({ state, getters }) {
+      await axios.post(`${state.bitcoinaireApiPath}/scores`, { ...state.roundStats, rankingScore: getters.percentCorrect });
     },
   },
 };
