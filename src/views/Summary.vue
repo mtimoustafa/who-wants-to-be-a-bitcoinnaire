@@ -1,0 +1,3 @@
+<template>
+  Score:
+</template>

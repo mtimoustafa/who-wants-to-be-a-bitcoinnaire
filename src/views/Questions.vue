@@ -16,13 +16,18 @@
         type="radio"
         :id="`answer_${index}`"
         :value="answer"
-        v-model="chosenAnswerIndex"
+        v-model="chosenAnswer"
       />
 
-      <label :for="`answer_${index}`">
-        {{ answer }}
-      </label>
+      <label
+        :for="`answer_${index}`"
+        v-html="answer"
+      />
     </div>
+
+    <button @click="submitAnswer">
+      Next
+    </button>
   </div>
 
   <div v-else>
@@ -40,9 +45,10 @@ export default {
   data() {
     return {
       currentQuestionIndex: 0,
-      chosenAnswerIndex: 0,
+      chosenAnswer: undefined,
 
       answerPool: [],
+      score: 0,
     };
   },
 
@@ -65,7 +71,7 @@ export default {
     },
 
     currentQuestion() {
-      return this.questions[this.currentQuestionNumber];
+      return this.questions[this.currentQuestionIndex];
     },
   },
 
@@ -73,10 +79,31 @@ export default {
     ...mapActions(['populateQuestions']),
 
     startRound() {
-      this.currentQuestionIndex = 0;
-      this.chosenAnswerIndex = 0;
-
       this.answerPool = this.shuffledAnswers(this.currentQuestion);
+      // TODO-EXTRA: don't shuffle answers if true/false question
+    },
+
+    submitAnswer() {
+      if (!this.chosenAnswer) { return; }
+
+      // TODO-EXTRA: display correct answer before moving on, if false answer
+      this.score += (this.chosenAnswer === this.currentQuestion.correct_answer);
+
+      if (this.currentQuestionNumber < this.totalQuestions) {
+        this.getNextQuestion();
+      } else {
+        this.completeRound();
+      }
+    },
+
+    getNextQuestion() {
+      this.chosenAnswer = '';
+      this.currentQuestionIndex += 1;
+      this.answerPool = this.shuffledAnswers(this.currentQuestion);
+    },
+
+    completeRound() {
+      this.$router.push('summary');
     },
 
     shuffledAnswers(question) {
