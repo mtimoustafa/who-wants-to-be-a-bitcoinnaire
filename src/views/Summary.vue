@@ -1,7 +1,11 @@
 <template>
   Score: {{ roundStats.score }} of {{ roundStats.totalQuestions }}
-  Percent correct: {{ roundStats.percentCorrect }}
+  Percent correct: {{ percentCorrect }}%
   Difficulty: {{ roundStats.difficulty }}
+
+  <button @click="$router.push('/')">
+    New Game
+  </button>
 </template>
 
 <script>
@@ -12,6 +16,11 @@ export default {
 
   computed: {
     ...mapState(['roundStats']),
+
+    percentCorrect() {
+      const { score, totalQuestions } = this.roundStats;
+      return (score && totalQuestions) ? score / totalQuestions * 100 : 0;
+    },
   },
 }
 </script>

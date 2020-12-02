@@ -1,27 +1,40 @@
 <template>
   <div>
     <div class="lobby__game-options">
-      <label for="difficulty-select">
-        Difficulty
-      </label>
+      <div class="lobby__player-name">
+        <label for="player-name">
+          Player name
+        </label>
 
-      <select
-        id="difficulty-select"
-        v-model="difficulty"
-      >
-        <option
-          v-for="difficulty in difficulties"
-          :key="difficulty.id"
-          :value="difficulty.id"
+        <input
+          id="player-name"
+          v-model="playerName"
+        />
+      </div>
+
+      <div class="lobby__difficulty-select">
+        <label for="difficulty-select">
+          Difficulty
+        </label>
+
+        <select
+          id="difficulty-select"
+          v-model="difficulty"
         >
-          {{ difficulty.label }}
-        </option>
-      </select>
-
-      <button @click="startRound">
-        Start
-      </button>
+          <option
+            v-for="difficulty in difficulties"
+            :key="difficulty.id"
+            :value="difficulty.id"
+          >
+            {{ difficulty.label }}
+          </option>
+        </select>
+      </div>
     </div>
+
+    <button @click="startRound">
+      Start
+    </button>
   </div>
 </template>
 
@@ -38,6 +51,7 @@ export default {
         { id: 'medium', label: 'Medium' },
         { id: 'hard', label: 'Hard' },
       ],
+      playerName: '',
       difficulty: '',
     };
   },
@@ -47,6 +61,7 @@ export default {
 
     startRound() {
       this.startNewRound({
+        playerName: this.playerName,
         difficulty: this.difficulty,
       });
       this.$router.push('questions');

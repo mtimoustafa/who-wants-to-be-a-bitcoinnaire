@@ -3,6 +3,8 @@ import axios from 'axios';
 export default {
   state: {
     openTriviaApiPath: 'https://opentdb.com/api.php',
+    bitcoinaireApiPath: 'http://localhost:8081/api',
+
     triviaProperties: {
       amount: 10,
       difficulty: 'easy',
@@ -10,28 +12,35 @@ export default {
 
     questions: {},
     roundStats: {
+      playerName: '',
       score: 0,
       totalQuestions: 0,
-      percentCorrect: '0%',
       difficulty: '',
     },
   },
 
   getters: {
-    triviaPropertiesAsParams(state) {
-      return Object.entries(state.triviaProperties)
-                   .map(([key, value]) => `${key}=${value}`)
-                   .join('&');
-    },
-
     questionsPopulated(state) {
       return state.questions && Object.keys(state.questions).length > 0;
+    },
+
+    defaultRoundStats() {
+      return {
+        playerName: '',
+        score: 0,
+        totalQuestions: 0,
+        difficulty: '',
+      };
     },
   },
 
   mutations: {
     setQuestions(state, questions) {
       state.questions = questions;
+    },
+
+    clearQuestions(state) {
+      state.questions = {};
     },
 
     setRoundStats(state, stats) {
@@ -44,36 +53,40 @@ export default {
   },
 
   actions: {
-    async populateQuestions({ state, commit, getters }) {
-      let query = `${state.openTriviaApiPath}?${getters.triviaPropertiesAsParams}`;
-      const { data: { results: questions } } = await axios.get(query);
+    async populateQuestions({ state, commit }) {
+      commit('clearQuestions');
 
+      const { data: { results: questions } } = await axios.get(state.openTriviaApiPath, { params: state.triviaProperties });
       // TODO: validation for when API returns an error
 
       commit('setQuestions', questions);
     },
 
-    startNewRound({ commit, dispatch }, { difficulty }) {
-      commit('setDifficulty', difficulty);
+    startNewRound({ commit, getters, dispatch }, { playerName, difficulty }) {
       commit('setRoundStats', {
-        score: 0,
-        totalQuestions: 0,
-        percentCorrect: '0%',
-        difficulty: '',
+        ...getters.defaultRoundStats,
+        playerName,
+        difficulty,
       });
-      dispatch('populateQuestions');
+      commit('setDifficulty', difficulty);
+      dispatch('populateQuestions', { difficulty });
     },
 
-    completeRound({ state, commit }, score) {
+    completeRound({ state, commit, dispatch }, score) {
       const totalQuestions = state.questions.length || 0;
-      const percentCorrect = (score && totalQuestions) ? score / totalQuestions * 100 : 0;
 
       commit('setRoundStats', {
+        playerName: state.roundStats.playerName,
         score,
         totalQuestions,
-        percentCorrect: `${percentCorrect}%`,
         difficulty: state.triviaProperties.difficulty,
       });
+
+      dispatch('submitStats');
+    },
+
+    async submitStats({ state }) {
+      const response = await axios.post(`${state.bitcoinaireApiPath}/scores`, state.roundStats);
     },
   },
 };
