@@ -5,13 +5,15 @@ export default {
     openTriviaApiPath: 'https://opentdb.com/api.php',
     triviaProperties: {
       amount: 10,
+      difficulty: 'easy',
     },
 
     questions: {},
-    lastRound: {
+    roundStats: {
       score: 0,
       totalQuestions: 0,
       percentCorrect: '0%',
+      difficulty: '',
     },
   },
 
@@ -32,12 +34,12 @@ export default {
       state.questions = questions;
     },
 
-    setLastRound(state, { score, totalQuestions, percentCorrect }) {
-      state.lastRound = {
-        score,
-        totalQuestions,
-        percentCorrect,
-      };
+    setRoundStats(state, stats) {
+      state.roundStats = stats;
+    },
+
+    setDifficulty(state, difficulty) {
+      state.triviaProperties.difficulty = difficulty;
     },
   },
 
@@ -51,14 +53,26 @@ export default {
       commit('setQuestions', questions);
     },
 
+    startNewRound({ commit, dispatch }, { difficulty }) {
+      commit('setDifficulty', difficulty);
+      commit('setRoundStats', {
+        score: 0,
+        totalQuestions: 0,
+        percentCorrect: '0%',
+        difficulty: '',
+      });
+      dispatch('populateQuestions');
+    },
+
     completeRound({ state, commit }, score) {
       const totalQuestions = state.questions.length || 0;
       const percentCorrect = (score && totalQuestions) ? score / totalQuestions * 100 : 0;
 
-      commit('setLastRound', {
+      commit('setRoundStats', {
         score,
         totalQuestions,
         percentCorrect: `${percentCorrect}%`,
+        difficulty: state.triviaProperties.difficulty,
       });
     },
   },

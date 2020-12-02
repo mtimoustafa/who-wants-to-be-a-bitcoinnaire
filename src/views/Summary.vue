@@ -1,6 +1,7 @@
 <template>
-  Score: {{ lastRound.score }} of {{ lastRound.totalQuestions }}
-  Percent correct: {{ lastRound.percentCorrect }}
+  Score: {{ roundStats.score }} of {{ roundStats.totalQuestions }}
+  Percent correct: {{ roundStats.percentCorrect }}
+  Difficulty: {{ roundStats.difficulty }}
 </template>
 
 <script>
@@ -10,7 +11,7 @@ export default {
   name: 'Summary',
 
   computed: {
-    ...mapState(['lastRound']),
+    ...mapState(['roundStats']),
   },
 }
 </script>

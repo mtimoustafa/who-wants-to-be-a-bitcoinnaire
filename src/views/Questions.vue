@@ -31,7 +31,7 @@
   </div>
 
   <div v-else>
-    <button @click="populateQuestions">Start</button>
+    Loading...
   </div>
 </template>
 
@@ -76,7 +76,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['populateQuestions', 'completeRound']),
+    ...mapActions(['completeRound']),
 
     startRound() {
       this.answerPool = this.shuffledAnswers(this.currentQuestion);

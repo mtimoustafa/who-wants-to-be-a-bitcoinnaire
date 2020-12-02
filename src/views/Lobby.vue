@@ -18,7 +18,7 @@
         </option>
       </select>
 
-      <button @click="$router.push('questions')">
+      <button @click="startRound">
         Start
       </button>
     </div>
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'Lobby',
 
@@ -38,6 +40,17 @@ export default {
       ],
       difficulty: '',
     };
+  },
+
+  methods: {
+    ...mapActions(['startNewRound']),
+
+    startRound() {
+      this.startNewRound({
+        difficulty: this.difficulty,
+      });
+      this.$router.push('questions');
+    },
   },
 
   mounted() {
