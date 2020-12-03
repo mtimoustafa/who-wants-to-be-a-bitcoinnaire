@@ -64,7 +64,7 @@ export default {
         playerName: this.playerName,
         difficulty: this.difficulty,
       });
-      this.$router.push('questions');
+      this.$router.replace('questions');
     },
   },
 

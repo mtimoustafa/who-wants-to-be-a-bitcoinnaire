@@ -10,6 +10,7 @@ export default {
       difficulty: 'easy',
     },
 
+    roundSetUp: false,
     questions: {},
     roundStats: {
       playerName: '',
@@ -17,6 +18,7 @@ export default {
       totalQuestions: 0,
       difficulty: '',
     },
+    highScores: [],
   },
 
   getters: {
@@ -55,6 +57,14 @@ export default {
     setDifficulty(state, difficulty) {
       state.triviaProperties.difficulty = difficulty;
     },
+
+    setHighScores(state, highScores) {
+      state.highScores = highScores;
+    },
+
+    setRoundSetUp(state, roundSetUp) {
+      state.roundSetUp = roundSetUp;
+    },
   },
 
   actions: {
@@ -73,6 +83,7 @@ export default {
         playerName,
         difficulty,
       });
+      commit('setRoundSetUp', true);
       commit('setDifficulty', difficulty);
       dispatch('populateQuestions', { difficulty });
     },
@@ -92,6 +103,14 @@ export default {
 
     async submitStats({ state, getters }) {
       await axios.post(`${state.bitcoinaireApiPath}/scores`, { ...state.roundStats, rankingScore: getters.percentCorrect });
+      // TODO: validation for when API returns an error
+    },
+
+    async getHighScores({ state, commit }) {
+      const { data: highScores } = await axios.get(`${state.bitcoinaireApiPath}/high_scores`);
+      // TODO: validation for when API returns an error
+
+      commit('setHighScores', highScores);
     },
   },
 };

@@ -38,9 +38,12 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
 import { knuthShuffle } from 'knuth-shuffle';
+import Redirect from '../mixins/Redirect';
 
 export default {
   name: 'Questions',
+
+  mixins: [Redirect],
 
   data() {
     return {
@@ -59,7 +62,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['questions']),
+    ...mapState(['roundSetUp', 'questions']),
     ...mapGetters(['questionsPopulated']),
 
     totalQuestions() {
@@ -104,7 +107,7 @@ export default {
 
     submitRound() {
       this.completeRound(this.currentScore);
-      this.$router.push('summary');
+      this.$router.replace('summary');
     },
 
     shuffledAnswers(question) {
