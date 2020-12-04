@@ -33,6 +33,7 @@ button {
 
 #app {
   padding-top: 5rem;
+  padding-bottom: 5rem;
   color: #2c3e50;
 
   font-family: Avenir, Helvetica, Arial, sans-serif;
