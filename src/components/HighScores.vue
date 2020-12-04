@@ -1,5 +1,8 @@
 <template>
-  <table>
+  <table
+    class="high-scores-table"
+    cellspacing="0"
+  >
     <thead>
       <tr>
         <th>Name</th>
@@ -17,7 +20,7 @@
         <td>{{ score.playerName }}</td>
         <td>{{ score.score }} of {{ score.totalQuestions }}</td>
         <td>{{ score.rankingScore }}%</td>
-        <td>{{ score.difficulty }}</td>
+        <td>{{ capitalise(score.difficulty) }}</td>
       </tr>
     </tbody>
     <tbody v-else>
@@ -30,9 +33,12 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
+import Helpers from '../mixins/Helpers';
 
 export default {
   name: 'HighScores',
+
+  mixins: [Helpers],
 
   props: {
     extraScores: {
@@ -69,3 +75,33 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.high-scores-table {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  table-layout: fixed;
+
+  tr:nth-child(even) {
+    background: #f7f7f7;
+  }
+
+  th, td {
+    padding: 0.3rem 0.5rem;
+    width: 50%;
+    text-align: left;
+    border-left: 1px solid #bbb;
+    word-break: break-word;
+
+    &:first-child {
+      border: none;
+    }
+  }
+
+  th {
+    background: #eee;
+  }
+}
+</style>

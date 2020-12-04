@@ -1,18 +1,38 @@
 <template>
-  Score: {{ roundStats.score }} of {{ roundStats.totalQuestions }}
-  Percent correct: {{ percentCorrect }}%
-  Difficulty: {{ roundStats.difficulty }}
+  <div class="score-breakdown">
+    <h2>
+      Score: {{ roundStats.score }} of {{ roundStats.totalQuestions }}
+    </h2>
 
-  <button @click="$router.replace('/')">
+    <p>
+      Accuracy: {{ percentCorrect }}%
+    </p>
+
+    <p>
+      Difficulty: {{ capitalise(roundStats.difficulty) }}
+    </p>
+  </div>
+
+  <button
+    class="new-game-button"
+    @click="$router.replace('/')"
+  >
     New Game
   </button>
 
-  <HighScores />
+  <div>
+    <h2 class="high-scores-header">
+      High Scores
+    </h2>
+
+    <HighScores />
+  </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
 import HighScores from '../components/HighScores';
+import Helpers from '../mixins/Helpers';
 import Redirect from '../mixins/Redirect';
 
 export default {
@@ -22,7 +42,10 @@ export default {
     HighScores,
   },
 
-  mixins: [Redirect],
+  mixins: [
+    Helpers,
+    Redirect
+  ],
 
   computed: {
     ...mapState(['roundStats']),
@@ -30,3 +53,23 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.score-breakdown {
+  margin-bottom: 1rem;
+
+  h2, p {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.new-game-button {
+  margin-bottom: 2rem;
+}
+
+.high-scores-header {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+</style>

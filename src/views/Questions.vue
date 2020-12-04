@@ -1,33 +1,41 @@
 <template>
   <div v-if="questionsPopulated">
-    <p>
+    <h2 class="question-count">
       Question {{ currentQuestionNumber }} of {{ totalQuestions }}
-    </p>
+    </h2>
 
-    {{ currentQuestion }}
-
-    <p v-html="currentQuestion.question" />
-
-    <div
-      v-for="(answer, index) in answerPool"
-      :key="`answer_${index}`"
-    >
-      <input
-        type="radio"
-        :id="`answer_${index}`"
-        :value="answer"
-        v-model="chosenAnswer"
+    <div class="question-wrapper">
+      <p
+        v-html="currentQuestion.question"
+        class="question-text"
       />
 
-      <label
-        :for="`answer_${index}`"
-        v-html="answer"
-      />
+      <div class="answers-wrapper">
+        <div
+          v-for="(answer, index) in answerPool"
+          :key="`answer_${index}`"
+          class="answer-item"
+        >
+          <input
+            type="radio"
+            :id="`answer_${index}`"
+            :value="answer"
+            v-model="chosenAnswer"
+            class="answer-radio-button"
+            @keydown.enter.stop="submitAnswer"
+          />
+
+          <label
+            :for="`answer_${index}`"
+            v-html="answer"
+          />
+        </div>
+      </div>
+
+      <button @click="submitAnswer">
+        Next
+      </button>
     </div>
-
-    <button @click="submitAnswer">
-      Next
-    </button>
   </div>
 
   <div v-else>
@@ -93,6 +101,7 @@ export default {
       this.currentScore += (this.chosenAnswer === this.currentQuestion.correct_answer);
 
       if (this.currentQuestionNumber < this.totalQuestions) {
+        this.chosenAnswer = undefined;
         this.getNextQuestion();
       } else {
         this.submitRound();
@@ -116,3 +125,34 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.question-count {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.question-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.question-text {
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+.answers-wrapper {
+  margin-bottom: 2rem;
+}
+
+.answer-item {
+  text-align: left;
+  margin-bottom: 0.5rem;
+}
+
+.answer-radio-button {
+  margin-right: 1rem;
+}
+</style>

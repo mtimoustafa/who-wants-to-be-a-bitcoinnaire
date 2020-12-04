@@ -11,4 +11,4 @@ export default {
       this.$router.replace('/');
     }
   },
-};
+}
