@@ -1,18 +1,29 @@
 <template>
   <div>
-    <div class="lobby__game-options">
-      <div class="lobby__player-name">
+    <div class="game-options">
+      <div class="player-name-wrapper">
         <label for="player-name">
           Player name
         </label>
 
-        <input
-          id="player-name"
-          v-model="playerName"
-        />
+        <div>
+          <input
+            id="player-name"
+            class="player-name-input"
+            :class="{ 'player-name--error': formError }"
+            v-model="playerName"
+          />
+
+          <div
+            v-if="formError"
+            class="player_name_error_message"
+          >
+            Please enter a name
+          </div>
+        </div>
       </div>
 
-      <div class="lobby__difficulty-select">
+      <div class="difficulty-select">
         <label for="difficulty-select">
           Difficulty
         </label>
@@ -53,13 +64,27 @@ export default {
       ],
       playerName: '',
       difficulty: '',
+      formError: false,
     };
+  },
+
+  watch: {
+    playerName() {
+      this.validateForm();
+    },
   },
 
   methods: {
     ...mapActions(['startNewRound']),
 
+    validateForm() {
+      this.formError = !this.playerName;
+    },
+
     startRound() {
+      this.validateForm();
+      if (this.formError) return;
+
       this.startNewRound({
         playerName: this.playerName,
         difficulty: this.difficulty,
@@ -91,5 +116,14 @@ li {
 
 a {
   color: #42b983;
+}
+
+.player-name-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.player-name-input {
+  display: block;
 }
 </style>
