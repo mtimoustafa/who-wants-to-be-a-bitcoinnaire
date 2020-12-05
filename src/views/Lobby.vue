@@ -17,7 +17,7 @@
         >
           <input
             id="player-name-input"
-            v-model="playerName"
+            v-model.trim="playerName"
             @keydown.enter.stop="startRound"
           />
 

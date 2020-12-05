@@ -7,7 +7,7 @@ export default {
 
     triviaProperties: {
       amount: 10,
-      difficulty: 'easy',
+      difficulty: 'easy', // TODO: remove this as it's a duplicate now
     },
 
     roundSetUp: false,
