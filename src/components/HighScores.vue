@@ -40,15 +40,8 @@ export default {
 
   mixins: [Helpers],
 
-  props: {
-    extraScores: {
-      type: Array,
-      default: undefined,
-    },
-  },
-
   computed: {
-    ...mapState(['highScores']),
+    ...mapState(['highScores', 'roundStats']),
     ...mapGetters(['percentCorrect']),
 
     scoresPopulated() {
@@ -56,11 +49,8 @@ export default {
     },
 
     allScores() {
-      const formattedScores = [];
-      if (this.extraScores) {
-        this.extraScores.map(score => { return { ...score, rankingScore: this.percentCorrect } });
-      }
-      return (this.highScores) ? [ ...this.highScores, ...formattedScores ] : formattedScores;
+      const roundStats = { ...this.roundStats, rankingScore: this.percentCorrect };
+      return (this.highScores) ? [ ...this.highScores, roundStats ] : roundStats;
     },
   },
 
