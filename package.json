@@ -7,7 +7,9 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test": "jest",
-    "server": "nodemon ./src/server/server"
+    "server": "nodemon ./src/server/server",
+    "postinstall": "npm run build",
+    "start": "node server.js"
   },
   "engines": {
     "node": "12.19.0"
@@ -23,7 +25,6 @@
     "knuth-shuffle": "^1.0.8",
     "sqlite3": "^5.0.0",
     "vue": "^3.0.0",
-    "@vue/cli-service": "~4.5.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-rc.2"
   },
@@ -31,6 +32,7 @@
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/test-utils": "^2.0.0-beta.12",
     "babel-eslint": "^10.1.0",
