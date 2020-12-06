@@ -5,34 +5,27 @@ export default {
     openTriviaApiPath: 'https://opentdb.com/api.php',
     bitcoinaireApiPath: 'http://localhost:8081/api',
 
-    triviaProperties: {
-      amount: 10,
-      difficulty: 'easy', // TODO: remove this as it's a duplicate now
-    },
-
     roundSetUp: false,
     questions: {},
+    highScores: [],
+
     roundStats: {
       playerName: '',
       score: 0,
       totalQuestions: 0,
       difficulty: '',
     },
-    highScores: [],
+    defaultRoundStats: {
+      playerName: '',
+      score: 0,
+      totalQuestions: 0,
+      difficulty: '',
+    },
   },
 
   getters: {
     questionsPopulated(state) {
       return state.questions && Object.keys(state.questions).length > 0;
-    },
-
-    defaultRoundStats() {
-      return {
-        playerName: '',
-        score: 0,
-        totalQuestions: 0,
-        difficulty: '',
-      };
     },
 
     percentCorrect(state) {
@@ -54,10 +47,6 @@ export default {
       state.roundStats = stats;
     },
 
-    setDifficulty(state, difficulty) {
-      state.triviaProperties.difficulty = difficulty;
-    },
-
     setHighScores(state, highScores) {
       state.highScores = highScores;
     },
@@ -69,22 +58,29 @@ export default {
 
   actions: {
     async populateQuestions({ state, commit }) {
-      commit('clearQuestions');
+      commit('clearQuestions'); // Prevent old question flicker on starting new round
 
-      const { data: { results: questions } } = await axios.get(state.openTriviaApiPath, { params: state.triviaProperties });
-      // TODO: validation for when API returns an error
+      const triviaParams = {
+        amount: 10,
+        difficulty: state.roundStats.difficulty || 'easy',
+      };
 
-      commit('setQuestions', questions);
+      try {
+        const { data: { results: questions } } = await axios.get(state.openTriviaApiPath, { params: triviaParams  });
+        commit('setQuestions', questions);
+      } catch (error) {
+        // TODO: this could be more sophisticated. E.g. sanitize error message, print it out in front-end, log it somewhere
+        console.error(error);
+      }
     },
 
-    startNewRound({ commit, getters, dispatch }, { playerName, difficulty }) {
+    startNewRound({ state, commit, dispatch }, { playerName, difficulty }) {
       commit('setRoundStats', {
-        ...getters.defaultRoundStats,
+        ...state.defaultRoundStats,
         playerName,
         difficulty,
       });
       commit('setRoundSetUp', true);
-      commit('setDifficulty', difficulty);
       dispatch('populateQuestions', { difficulty });
     },
 
@@ -95,22 +91,29 @@ export default {
         playerName: state.roundStats.playerName,
         score,
         totalQuestions,
-        difficulty: state.triviaProperties.difficulty,
+        difficulty: state.roundStats.difficulty,
       });
 
       dispatch('submitStats');
     },
 
     async submitStats({ state, getters }) {
-      await axios.post(`${state.bitcoinaireApiPath}/scores`, { ...state.roundStats, rankingScore: getters.percentCorrect });
-      // TODO: validation for when API returns an error
+      try {
+        await axios.post(`${state.bitcoinaireApiPath}/scores`, { ...state.roundStats, rankingScore: getters.percentCorrect });
+      } catch (error) {
+        // TODO: this could be more sophisticated. E.g. sanitize error message, print it out in front-end, log it somewhere
+        console.error(error);
+      }
     },
 
     async getHighScores({ state, commit }) {
-      const { data: highScores } = await axios.get(`${state.bitcoinaireApiPath}/high_scores`);
-      // TODO: validation for when API returns an error
-
-      commit('setHighScores', highScores);
+      try {
+        const { data: highScores } = await axios.get(`${state.bitcoinaireApiPath}/high_scores`);
+        commit('setHighScores', highScores);
+      } catch (error) {
+        // TODO: this could be more sophisticated. E.g. sanitize error message, print it out in front-end, log it somewhere
+        console.error(error);
+      }
     },
   },
 };
