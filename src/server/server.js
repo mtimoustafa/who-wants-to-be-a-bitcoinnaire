@@ -1,4 +1,5 @@
 // TODO: put port in env var
+// TODO: add knex for cleaner SQL query building
 const SERVER_PORT = 8081;
 
 const sqlite3 = require('sqlite3').verbose();
@@ -31,7 +32,7 @@ db.serialize(() => {
 
 app.get('/api/high_scores', (req, res, next) => {
   db.all('SELECT * from scores ORDER BY rankingScore DESC LIMIT 10', (err, scores) => {
-    res.json(scores);
+    res.status(200).json(scores);
   });
 });
 
@@ -55,17 +56,12 @@ app.post('/api/scores', [
     req.body.difficulty,
   ], err => {
     if (err) res.status(500).json({ error: err.message });
-    res.status(201).json();
-  });
-});
-
-app.delete('/api/scores', (req, res, next) => {
-  db.run('DELETE FROM scores', err => {
-    if (err) res.status(500).json({ error: err.message });
-    res.status(200).json();
+    res.status(201).json(req.body);
   });
 });
 
 app.listen(SERVER_PORT, () => {
   console.log(`Server running on port ${SERVER_PORT}`);
 });
+
+module.exports = { app, db };
