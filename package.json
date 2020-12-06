@@ -7,9 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test": "jest",
-    "server": "nodemon ./src/server/server",
-    "postinstall": "npm run build",
-    "start": "node server.js"
+    "server": "nodemon ./src/server/server"
   },
   "engines": {
     "node": "12.19.0"
