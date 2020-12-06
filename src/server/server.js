@@ -59,8 +59,8 @@ app.post('/api/scores', [
   });
 });
 
-app.listen(process.env.EXPRESS_PORT, () => {
-  console.log(`Server running on port ${process.env.EXPRESS_PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server running on port ${process.env.PORT}`);
 });
 
 module.exports = { app, db };
