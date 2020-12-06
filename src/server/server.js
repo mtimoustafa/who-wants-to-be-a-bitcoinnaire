@@ -59,6 +59,15 @@ app.post('/api/scores', [
   });
 });
 
+// This is a debug endpoint i.e. not being used in the app
+// It's a shortcut for me to reset the database on the proof of concept
+app.delete('/api/scores', (req, res, next) => {
+  db.run('DELETE FROM scores', err => {
+    if (err) res.status(500).json({ error: err.message });
+    res.status(200).json();
+  });
+});
+
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
 });
