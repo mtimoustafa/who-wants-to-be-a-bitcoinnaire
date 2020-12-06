@@ -3,7 +3,7 @@ import axios from 'axios';
 export default {
   state: {
     // Vue 3 is refusing to accept any environment variables :(
-    bitcoinaireApiPath: 'https://bitcoinaire-front-end.herokuapp.com:8081/api',
+    bitcoinaireApiPath: 'https://bitcoinaire-back-end.herokuapp.com/api',
     openTriviaApiPath: 'https://opentdb.com/api.php',
 
     roundSetUp: false,
