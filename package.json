@@ -8,7 +8,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test": "jest",
-    "server": "nodemon ./src/server/server"
+    "server": "node ./src/server/server",
+    "server-local": "nodemon ./src/server/server"
   },
   "engines": {
     "node": "12.19.0"
