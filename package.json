@@ -9,6 +9,9 @@
     "test": "jest",
     "server": "nodemon ./src/server/server"
   },
+  "engines": {
+    "node": "12.19.0"
+  },
   "dependencies": {
     "axios": "^0.21.0",
     "body-parser": "^1.19.0",
