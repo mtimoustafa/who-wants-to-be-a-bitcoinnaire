@@ -22,6 +22,22 @@ describe('server', () => {
       });
   });
 
+  describe('/api/high_scores', () => {
+    it('returns 200 on GET', done => {
+      request.get('/api/high_scores')
+        .expect(200)
+        .end((err, res) => {
+          expect(err).toBeFalsy();
+          expect(res.body).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining(score)
+            ])
+          );
+          done();
+        });
+    });
+  });
+
   describe('/api/scores', () => {
     it('returns 201 on POST with valid parameters', done => {
       request.post('/api/scores')
@@ -58,22 +74,6 @@ describe('server', () => {
         .expect('Content-Type', /json/)
         .end((err, res) => {
           expect(err).toBeFalsy();
-          done();
-        });
-    });
-  });
-
-  describe('/api/high_scores', () => {
-    it('returns 200 on GET', done => {
-      request.get('/api/high_scores')
-        .expect(200)
-        .end((err, res) => {
-          expect(err).toBeFalsy();
-          expect(res.body).toEqual(
-            expect.arrayContaining([
-              expect.objectContaining(score)
-            ])
-          );
           done();
         });
     });
