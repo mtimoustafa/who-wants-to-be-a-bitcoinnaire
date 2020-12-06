@@ -64,8 +64,13 @@ export default {
   },
 
   watch: {
-    questions() {
-      this.startRound();
+    questions: {
+      immediate: true,
+      handler() {
+        if (this.questionsPopulated) {
+          this.startRound();
+        }
+      },
     },
   },
 

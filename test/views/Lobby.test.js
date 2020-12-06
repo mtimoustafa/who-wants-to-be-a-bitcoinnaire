@@ -32,23 +32,23 @@ describe('Lobby', () => {
   });
 
   it('provides correct difficulty settings', () => {
-    const difficulty = wrapper.find('select');
-    expect(difficulty);
-
+    const difficulty = wrapper.get('select');
     const difficultyOptions = difficulty.findAll('option').map(o => o.element.label);
+
     expect(difficultyOptions).toEqual(
       expect.arrayContaining([ 'Easy', 'Medium', 'Hard' ])
     );
   });
 
   it('displays validation error if submitting without player name', async () => {
-    const startButton = wrapper.find('button');
+    const startButton = wrapper.get('button');
     await startButton.trigger('click');
+
     expect(wrapper.text()).toContain('Please enter a name');
   });
 
   it('displays validation error if player name cleared', async () => {
-    const playerName = wrapper.find('input');
+    const playerName = wrapper.get('input');
     await playerName.setValue('Testy test');
     await playerName.setValue('');
 
@@ -56,8 +56,8 @@ describe('Lobby', () => {
   });
 
   it('trims whitespace from player name', async () => {
-    const playerName = wrapper.find('input');
-    const startButton = wrapper.find('button');
+    const playerName = wrapper.get('input');
+    const startButton = wrapper.get('button');
 
     await playerName.setValue('  Testy test ');
     await startButton.trigger('click');
@@ -66,9 +66,9 @@ describe('Lobby', () => {
   });
 
   it('navigates to questions page with correct settings', async () => {
-    const playerName = wrapper.find('input');
-    const difficulty = wrapper.find('select');
-    const startButton = wrapper.find('button');
+    const playerName = wrapper.get('input');
+    const difficulty = wrapper.get('select');
+    const startButton = wrapper.get('button');
 
     await playerName.setValue('Testy test');
     await difficulty.setValue('medium');
@@ -81,8 +81,9 @@ describe('Lobby', () => {
   });
 
   it('does not navigate if player name missing', async () => {
-    const startButton = wrapper.find('button');
+    const startButton = wrapper.get('button');
     await startButton.trigger('click');
+
     expect(mockRouter.replace).not.toHaveBeenCalled();
   });
 });
