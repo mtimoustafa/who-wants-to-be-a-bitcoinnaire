@@ -8,6 +8,16 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: 'App',
+
+  mounted() {
+    document.title = 'Who Wants to Be a Bitcoinaire?';
+  },
+}
+</script>
+
 <style lang="scss">
 html {
   height: 100%;
