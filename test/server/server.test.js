@@ -15,7 +15,7 @@ describe('server', () => {
 
   it('allows front-end through CORS', done => {
     request.get('/api/high_scores')
-      .expect('Access-Control-Allow-Origin', 'http://localhost:8080')
+      .expect('Access-Control-Allow-Origin', process.env.VUE_PATH)
       .end((err, res) => {
         expect(err).toBeFalsy();
         done();

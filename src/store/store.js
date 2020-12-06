@@ -3,7 +3,7 @@ import axios from 'axios';
 export default {
   state: {
     openTriviaApiPath: 'https://opentdb.com/api.php',
-    bitcoinaireApiPath: 'http://localhost:8081/api',
+    bitcoinaireApiPath: `http://localhost:8081/api`, // Vue 3 is refusing to accept any environment variables :(
 
     roundSetUp: false,
     questions: {},

@@ -1,6 +1,4 @@
-// TODO: put port in env var
-// TODO: add knex for cleaner SQL query building
-const SERVER_PORT = 8081;
+require('dotenv').config();
 
 const sqlite3 = require('sqlite3').verbose();
 const express = require('express');
@@ -11,7 +9,7 @@ const { body, validationResult } = require('express-validator');
 const app = express();
 app.use(bodyParser.json());
 app.use(cors({
-  origin: 'http://localhost:8080',
+  origin: process.env.VUE_PATH,
 }));
 
 const db = new sqlite3.Database('./db/database.sql',  err => {
@@ -30,6 +28,7 @@ db.serialize(() => {
   )');
 });
 
+// TODO: add knex for cleaner SQL query building
 app.get('/api/high_scores', (req, res, next) => {
   db.all('SELECT * from scores ORDER BY rankingScore DESC LIMIT 10', (err, scores) => {
     res.status(200).json(scores);
@@ -60,8 +59,8 @@ app.post('/api/scores', [
   });
 });
 
-app.listen(SERVER_PORT, () => {
-  console.log(`Server running on port ${SERVER_PORT}`);
+app.listen(process.env.EXPRESS_PORT, () => {
+  console.log(`Server running on port ${process.env.EXPRESS_PORT}`);
 });
 
 module.exports = { app, db };

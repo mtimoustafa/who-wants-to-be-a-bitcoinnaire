@@ -1,1 +1,1 @@
-web: yarn server &; yarn serve
+web: yarn serve
