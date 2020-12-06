@@ -1,2 +1,2 @@
-web: yarn serve
+web: npm start
 worker: yarn server
