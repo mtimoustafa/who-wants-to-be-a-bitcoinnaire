@@ -12,7 +12,7 @@
     "server-local": "nodemon ./src/server/server"
   },
   "engines": {
-    "node": "12.19.0"
+    "node": "^12.19.0"
   },
   "dependencies": {
     "axios": "^0.21.0",
